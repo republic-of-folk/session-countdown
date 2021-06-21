@@ -1,0 +1,47 @@
+Session countdown tool:
+
+USER:
+
+1. Countdown screen.
+ - countdown clock, obviously
+ - date and time of next game
+ - date and time of game after next
+ - shows random screeenshot
+ - (optional) shows date and time of games
+ - asks for permission to show notifications, worker notifies about session starting and/or being cancelled.
+ - if no permission was given, a button to enable notifications shows up
+ - if permission was given, a button to revoke it shows up
+ - change your time zone
+
+ADMIN (vue.js):
+
+1. Admin panel login
+ - user creation and password reset via cli
+
+2. Dashboard shows list of configured games
+
+3. Add / edit game
+ - two options: one-time, regular
+ - one time has date and time
+ - regular has day of the week and time
+ - (optional) regular can have multiple days, that are alternate
+ - additional fields: name, description, link
+
+4. Screenshots
+ - upload files
+ - provide imgur album link
+
+5. Theme editor
+ - show complete list of available games with dates?
+ - show screenshots?
+
+4. Notification settings
+ - enabled / disabled
+
+
+
+
+
+
+FEATURE REQUESTS
+ - discord bot
