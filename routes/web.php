@@ -26,6 +26,11 @@ Route::name('auth.')
                   AuthController::class,
                   'authenticate'
               ]);
+         Route::name('logout')
+              ->post('/logout', [
+                  AuthController::class,
+                  'logout'
+              ]);
      });
 
 Route::prefix('admin')
