@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Countdown</title>
+    <script src="{{asset('js/site.js')}}" defer></script>
 </head>
 <body>
 @if($current_game)
@@ -34,7 +35,5 @@
 @else
     No game planned
 @endif
-
-<script src="{{asset('js/site.js')}}"></script>
 </body>
 </html>
