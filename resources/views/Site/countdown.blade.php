@@ -26,6 +26,9 @@
             <div class="game-date" data-date="{{ $next_game->event_date }}">
                 {{ $next_game->event_date }}
             </div>
+            <div class="game-countdown">
+                in 0 days, 00 hours, 00 minutes, 00 seconds
+            </div>
         </div>
     @endif
 @else
