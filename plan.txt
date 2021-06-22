@@ -38,7 +38,9 @@ ADMIN (vue.js):
 4. Notification settings
  - enabled / disabled
 
-
+USERS
+- Users are created with php artisan user:create
+- Password is reset with php artisan user:reset
 
 
 
