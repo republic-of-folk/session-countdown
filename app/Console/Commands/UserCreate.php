@@ -5,8 +5,9 @@ namespace App\Console\Commands;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
-class CreateUser extends Command
+class UserCreate extends Command
 {
     /**
      * The name and signature of the console command.
@@ -67,6 +68,7 @@ class CreateUser extends Command
         $user->password = Hash::make($password);
         $user->email = $email;
         $user->name = $name;
+        $user->api_token = Hash::make(Str::random(64));
         $user->save();
 
         echo "User $email created\n";

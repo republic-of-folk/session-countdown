@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\GameSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')
+     ->get('/user', function (Request $request) {
+         return $request->user();
+     });
+
+Route::middleware('auth:api')
+     ->get('/test', function () {
+         return "Hello world";
+     });
+
+Route::middleware('auth:api')
+     ->group(function () {
+         Route::get('/game-session', function () {
+             return GameSession::all();
+         });
+         Route::get('/game-session/{game_session}', function (GameSession $game_session) {
+             return $game_session;
+         });
+     });
