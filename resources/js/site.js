@@ -1,4 +1,4 @@
-import('countdown-js').then(({default: Countdown}) => {
+impor('countdown-js').then(({default: Countdown}) => {
 
     const create_countdown_timer = (container) => {
         const game_date_el = container.querySelector('.game-date');

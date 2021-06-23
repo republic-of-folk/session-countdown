@@ -9,15 +9,6 @@
 export default {
     name: "GameSessionListItem",
     props: ["session"],
-    data() {
-        return {
-            session: {
-                id: '',
-                name: '',
-                event_date: '',
-            },
-        };
-    },
 }
 </script>
 
