@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "ES2020",
+        "target": "ES6",
+        "sourceMap": true,
+        "strict": true,
+        "moduleResolution": "Node",
+        "experimentalDecorators": true
+    },
+    "include": [
+        "resources/js/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

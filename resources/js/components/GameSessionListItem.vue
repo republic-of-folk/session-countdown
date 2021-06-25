@@ -1,21 +1,31 @@
 <template>
     <tr>
-        <td>{{ session.name }}</td>
-        <td>{{ session.event_date }}</td>
+        <td>
+            <a href="#" role="button"
+               v-on:click="$emit('edit_game_session', session, 123)"
+            >
+                {{ session.name }}
+            </a>
+        </td>
+        <td>{{ session.date }}</td>
+        <td>{{ session.time }}</td>
     </tr>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue, {PropType} from 'vue';
+import {GameSession} from '../lib/GameSession';
+
+// noinspection JSUnusedGlobalSymbols
+export default Vue.extend({
     name: "GameSessionListItem",
-    props: ["session"],
-}
+    props: {
+        session: {
+            type: Object as PropType<GameSession>
+        }
+    },
+});
 </script>
 
 <style scoped lang="scss">
-td {
-    &:not(:last-child) {
-        border-right: 1px solid black;
-    }
-}
 </style>

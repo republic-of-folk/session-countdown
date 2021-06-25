@@ -13,9 +13,9 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/site.js', 'public/js');
 
-mix.js('resources/js/admin.js', 'public/js')
+mix.ts('resources/js/admin.ts', 'public/js')
     .vue()
-    .sass('resources/sass/app.scss', 'public/css');
+    .sass('resources/scss/admin.scss', 'public/css/admin.min.css');
 
 mix.version();
 mix.sourceMaps(true, 'source-map');
