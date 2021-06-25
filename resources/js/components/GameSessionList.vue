@@ -27,7 +27,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import {GameSession} from '../lib/GameSession';
+import {GameSession} from '../models/GameSession';
 
 // noinspection JSUnusedGlobalSymbols
 export default Vue.extend({
