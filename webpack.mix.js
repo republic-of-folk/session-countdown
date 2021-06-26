@@ -11,10 +11,15 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/js/site.js', 'public/js');
+mix
+    .js('resources/js/site.js', 'public/js');
 
-mix.ts('resources/js/admin.ts', 'public/js')
-    .vue()
+mix
+    .ts('resources/js/admin.ts', 'public/js')
+    .vue();
+
+mix
+    .sass('resources/scss/auth.scss', 'public/css/auth.min.css')
     .sass('resources/scss/admin.scss', 'public/css/admin.min.css');
 
 mix.version();
