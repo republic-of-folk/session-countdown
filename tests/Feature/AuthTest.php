@@ -34,8 +34,7 @@ class AuthTest extends TestCase
     public function test_CorrectCredentialsPassLogin()
     {
         $user = User::factory()
-                    ->make();
-        $user->save();
+                    ->create();
 
         $this->get('/login');
         $response = $this->post('/login', [
@@ -44,5 +43,21 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertRedirect('/admin');
+    }
+
+    public function test_wrongApiCredentialsRedirectToLogin()
+    {
+        $response = $this->get('/api/game-session');
+        $response->assertRedirect('/login');
+    }
+
+    public function test_correctApiCredentialsGiveData()
+    {
+        $user = User::factory()
+                    ->create();
+
+        $response = $this->actingAs($user, 'api')
+                         ->get("/api/game-session");
+        $response->assertOk();
     }
 }
