@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Requests\GameSessionRequest;
 use App\Models\GameSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,5 +34,16 @@ Route::middleware('auth:api')
          });
          Route::get('/game-session/{game_session}', function (GameSession $game_session) {
              return $game_session;
+         });
+         Route::post('/game-session', function (GameSessionRequest $request) {
+             $data = $request->validated();
+
+             $game_session = new GameSession([
+                 'name'       => $data['name'],
+                 'event_date' => $data['event_date'],
+             ]);
+             $game_session->save();
+
+             return response()->json($game_session, Response::HTTP_CREATED);
          });
      });
