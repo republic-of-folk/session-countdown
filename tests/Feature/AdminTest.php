@@ -65,4 +65,35 @@ class AdminTest extends TestCase
             'event_date' => $game_session_data->event_date->format('Y-m-d H:i:s'),
         ]);
     }
+
+    public function test_gameSessionApiPostSavesNewGameSession()
+    {
+        /** @var GameSession $new_game_session_data */
+        $new_game_session_data = GameSession::factory()
+                                            ->make();
+
+        // Create new game session
+        $response = $this->actingAs($this->user, 'api')
+                         ->post('/api/game-session', [
+                             'name'       => $new_game_session_data->name,
+                             'event_date' => $new_game_session_data->event_date,
+                         ]);
+
+        // Assert it's created and returns session created from given data
+        $response->assertCreated();
+        $response->assertJson([
+            'name'       => $new_game_session_data->name,
+            'event_date' => $new_game_session_data->event_date,
+        ]);
+
+        // Assert created session gets saved in the database.
+        $new_game_session_id = $response->json('id');
+        $response = $this->actingAs($this->user, 'api')
+                         ->get("/api/game-session/$new_game_session_id");
+        $response->assertOk();
+        $response->assertJson([
+            'name'       => $new_game_session_data->name,
+            'event_date' => $new_game_session_data->event_date,
+        ]);
+    }
 }
