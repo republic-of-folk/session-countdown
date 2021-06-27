@@ -3,17 +3,19 @@
 namespace Tests\Feature;
 
 use App\Models\GameSession;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 /**
+ * @property User        user
  * @property GameSession game_session_past
  * @property GameSession game_session_current
  * @property GameSession game_session_next
  * @property GameSession game_session_future
  */
-class SiteTest extends TestCase
+class AdminTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
@@ -21,6 +23,9 @@ class SiteTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->user = User::factory()
+                          ->create();
 
         $this->game_session_past = GameSession::factory()
                                               ->create([
@@ -40,22 +45,11 @@ class SiteTest extends TestCase
                                                 ]);
     }
 
-    public function test_homeViewExists()
+    public function test_gameSessionApiReturnsAllSessions()
     {
-        $response = $this->get('/');
+        $response = $this->actingAs($this->user, 'api')
+                         ->get('/api/game-session');
         $response->assertOk();
-        $response->assertViewIs('Site.countdown');
-    }
-
-    public function test_gameSessionApiShowsOnlyTwoNextSessions()
-    {
-        $response = $this->get('/');
-
-        $response->assertDontSeeText($this->game_session_past->event_date->format('Y-m-d H:i:s'));
-        $response->assertSeeTextInOrder([
-            $this->game_session_current->event_date->format('Y-m-d H:i:s'),
-            $this->game_session_next->event_date->format('Y-m-d H:i:s'),
-        ]);
-        $response->assertDontSeeText($this->game_session_future->event_date->format('Y-m-d H:i:s'));
+        $response->assertJsonCount(4);
     }
 }
