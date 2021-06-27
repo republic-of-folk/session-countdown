@@ -102,4 +102,35 @@ class AdminTest extends TestCase
             'event_date' => $new_game_session_data->event_date->format('c'),
         ]);
     }
+
+    public function test_gameSessionApiPutEditsExistingGameSession()
+    {
+        /** @var GameSession $game_session_to_edit */
+        $game_session_to_edit = $this->game_session_current;
+        $new_name = 'edited game session name';
+        $new_date = $this->faker->dateTimeBetween('+10 years', '+20 years');
+
+        // Try to edit the session
+        $response = $this->actingAs($this->user, 'api')
+                         ->put("/api/game-session/$game_session_to_edit->id", [
+                             'name'       => $new_name,
+                             'event_date' => $new_date,
+                         ]);
+        $response->assertSuccessful();
+
+        // Assert you get edited GameSession in response
+        $response->assertJson([
+            'name'       => $new_name,
+            'event_date' => $new_date->format('c'),
+        ]);
+
+        // Assert edited GameSession gets saved in the database
+        $response = $this->actingAs($this->user, 'api')
+                         ->get("/api/game-session/$game_session_to_edit->id");
+        $response->assertOk();
+        $response->assertJson([
+            'name'       => $new_name,
+            'event_date' => $new_date->format('c'),
+        ]);
+    }
 }

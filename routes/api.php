@@ -46,4 +46,15 @@ Route::middleware('auth:api')
 
              return response()->json($game_session, Response::HTTP_CREATED);
          });
+         Route::put('/game-session/{game_session}', function (GameSession $gameSession, GameSessionRequest $request) {
+             $data = $request->validated();
+             if ($gameSession->update($data))
+             {
+                 return $gameSession;
+             }
+             else
+             {
+                 return response(Response::HTTP_BAD_REQUEST);
+             }
+         });
      });
