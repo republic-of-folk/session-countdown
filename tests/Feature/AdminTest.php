@@ -55,6 +55,7 @@ class AdminTest extends TestCase
 
     public function test_gameSessionApiReturnsCorrectSingleSession()
     {
+        /** @var GameSession $game_session_data */
         $game_session_data = $this->game_session_current;
 
         $response = $this->actingAs($this->user, 'api')
@@ -83,7 +84,7 @@ class AdminTest extends TestCase
         $response->assertCreated();
         $response->assertJson([
             'name'       => $new_game_session_data->name,
-            'event_date' => $new_game_session_data->event_date,
+            'event_date' => $new_game_session_data->event_date->format('Y-m-d H:i:s'),
         ]);
 
         // Assert created session gets saved in the database.
@@ -93,7 +94,7 @@ class AdminTest extends TestCase
         $response->assertOk();
         $response->assertJson([
             'name'       => $new_game_session_data->name,
-            'event_date' => $new_game_session_data->event_date,
+            'event_date' => $new_game_session_data->event_date->format('Y-m-d H:i:s'),
         ]);
     }
 }
