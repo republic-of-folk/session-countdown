@@ -22,4 +22,7 @@ class GameSession extends Model
         'event_date',
     ];
 
+    protected $casts = [
+        'event_date' => 'datetime:c',
+    ];
 }

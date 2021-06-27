@@ -63,7 +63,7 @@ class AdminTest extends TestCase
         $response->assertOk();
         $response->assertJson([
             'name'       => $game_session_data->name,
-            'event_date' => $game_session_data->event_date->format('Y-m-d H:i:s'),
+            'event_date' => $game_session_data->event_date->format('c'),
         ]);
     }
 
@@ -77,7 +77,7 @@ class AdminTest extends TestCase
         $response = $this->actingAs($this->user, 'api')
                          ->post('/api/game-session', [
                              'name'       => $new_game_session_data->name,
-                             'event_date' => $new_game_session_data->event_date->format('Y-m-d H:i:s'),
+                             'event_date' => $new_game_session_data->event_date,
                          ]);
 
         // Assert it's created and returns session created from given data
@@ -89,7 +89,7 @@ class AdminTest extends TestCase
         ]);
         $response->assertJson([
             'name'       => $new_game_session_data->name,
-            'event_date' => $new_game_session_data->event_date->format('Y-m-d H:i:s'),
+            'event_date' => $new_game_session_data->event_date->format('c'),
         ]);
 
         // Assert created session gets saved in the database.
@@ -99,7 +99,7 @@ class AdminTest extends TestCase
         $response->assertOk();
         $response->assertJson([
             'name'       => $new_game_session_data->name,
-            'event_date' => $new_game_session_data->event_date->format('Y-m-d H:i:s'),
+            'event_date' => $new_game_session_data->event_date->format('c'),
         ]);
     }
 }

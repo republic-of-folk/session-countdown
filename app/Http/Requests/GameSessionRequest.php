@@ -20,7 +20,6 @@ class GameSessionRequest extends FormRequest
             ],
             'event_date' => [
                 'date',
-                'date_format:Y-m-d H:i:s',
                 'required'
             ]
         ];
