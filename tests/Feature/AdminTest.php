@@ -52,4 +52,17 @@ class AdminTest extends TestCase
         $response->assertOk();
         $response->assertJsonCount(4);
     }
+
+    public function test_gameSessionApiReturnsCorrectSingleSession()
+    {
+        $game_session_data = $this->game_session_current;
+
+        $response = $this->actingAs($this->user, 'api')
+                         ->get("/api/game-session/$game_session_data->id");
+        $response->assertOk();
+        $response->assertJson([
+            'name'       => $game_session_data->name,
+            'event_date' => $game_session_data->event_date->format('Y-m-d H:i:s'),
+        ]);
+    }
 }
