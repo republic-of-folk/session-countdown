@@ -1,6 +1,8 @@
 <template>
     <div>
-        <game-session-modal ref="modal"></game-session-modal>
+        <game-session-modal ref="modal"
+                            v-on:game_session_edited="onGameSessionEdited"
+        ></game-session-modal>
 
         <table v-if="game_sessions.length"
                class="table table-bordered table-light table-hover">
@@ -53,7 +55,17 @@ export default Vue.extend({
             $modal.session = session;
             let bs_modal = new this.$bootstrap.Modal($modal.$el, {});
             bs_modal.show();
-        }
+        },
+        onGameSessionEdited(new_session_data: GameSession) {
+            let new_session = new GameSession(new_session_data.id, new_session_data.name, new Date(new_session_data.event_date));
+
+            let idx = this.game_sessions.findIndex(old_session => old_session.id == new_session.id);
+            if (idx >= 0) {
+                Vue.set(this.game_sessions, idx, new_session);
+            } else {
+                this.game_sessions.push(new_session);
+            }
+        },
     },
 });
 </script>

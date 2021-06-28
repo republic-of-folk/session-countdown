@@ -40,7 +40,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" v-on:click="onSaveClick">Save changes</button>
                 </div>
             </div>
         </div>
@@ -50,16 +50,32 @@
 <script lang="ts">
 import Vue from 'vue';
 import {GameSession} from '../models/GameSession';
+import {Modal} from 'bootstrap';
+
+type GameSessionModalData = {
+    id: string | number,
+    form: GameSessionForm,
+    session: GameSession,
+    modal: Modal | null,
+};
+
+type GameSessionForm = {
+    name: string,
+    date: string,
+    time: string,
+};
 
 // noinspection JSUnusedGlobalSymbols
 export default Vue.extend({
     name: 'GameSessionModal',
+
     data() {
         return {
             id: '',
             form: {},
             session: {} as GameSession,
-        };
+            modal: null,
+        } as GameSessionModalData;
     },
     mounted() {
         // @ts-ignore
@@ -67,13 +83,29 @@ export default Vue.extend({
     },
     methods: {
         onModalOpen() {
+            this.modal = Modal.getInstance(this.$el);
+
             let date_iso = new Date(this.session.event_date).toISOString();
             this.form = {
-                id: this.session.id,
                 name: this.session.name,
                 date: date_iso.slice(0, 10),
                 time: date_iso.slice(11, 16),
             };
+        },
+        onSaveClick() {
+            this.$root.$axios.put(`/api/game-session/${this.session.id}`, {
+                name: this.form.name,
+                event_date: new Date(`${this.form.date} ${this.form.time}`),
+            }).then((response) => {
+                if (response.status == 200) {
+                    this.$emit('game_session_edited', response.data);
+
+                    this.modal?.hide();
+                } else {
+                    // TODO: Show validation errors
+                    console.log(response);
+                }
+            });
         },
     },
 });

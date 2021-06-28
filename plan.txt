@@ -47,3 +47,8 @@ USERS
 
 FEATURE REQUESTS
  - discord bot
+
+
+
+!!!!!!
+SQLite requires that apache has write permission to folder where db resides!
