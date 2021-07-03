@@ -1,7 +1,7 @@
 <template>
     <div class="modal"
          tabindex="-1"
-         v-on="{'show.bs.modal': onModalOpen}"
+         v-on="{'show.bs.modal': onShow, 'hide.bs.modal': onHide,}"
     >
         <div class="modal-dialog">
             <div class="modal-content">
@@ -49,15 +49,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import {Component} from 'vue-property-decorator'
 import {GameSession} from '../models/GameSession';
 import {Modal} from 'bootstrap';
-
-type GameSessionModalData = {
-    id: string | number,
-    form: GameSessionForm,
-    session: GameSession,
-    modal: Modal | null,
-};
 
 type GameSessionForm = {
     name: string,
@@ -66,49 +60,53 @@ type GameSessionForm = {
 };
 
 // noinspection JSUnusedGlobalSymbols
-export default Vue.extend({
-    name: 'GameSessionModal',
+@Component
+export default class GameSessionModal extends Vue {
+    id: string = '';
+    form: GameSessionForm = {} as GameSessionForm;
+    modal?: Modal;
+    session: GameSession = {} as GameSession;
 
-    data() {
-        return {
-            id: '',
-            form: {},
-            session: {} as GameSession,
-            modal: null,
-        } as GameSessionModalData;
-    },
     mounted() {
         // @ts-ignore
         this.id = this._uid;
-    },
-    methods: {
-        onModalOpen() {
-            this.modal = Modal.getInstance(this.$el);
+        this.modal = new Modal(this.$el, {});
+    }
 
-            let date_iso = new Date(this.session.event_date).toISOString();
-            this.form = {
-                name: this.session.name,
-                date: date_iso.slice(0, 10),
-                time: date_iso.slice(11, 16),
-            };
-        },
-        onSaveClick() {
-            this.$root.$axios.put(`/api/game-session/${this.session.id}`, {
-                name: this.form.name,
-                event_date: new Date(`${this.form.date} ${this.form.time}`),
-            }).then((response) => {
-                if (response.status == 200) {
-                    this.$emit('game_session_edited', response.data);
+    public open(game_session: GameSession) {
+        this.session = game_session;
+        this.modal?.show();
+    };
 
-                    this.modal?.hide();
-                } else {
-                    // TODO: Show validation errors
-                    console.log(response);
-                }
-            });
-        },
-    },
-});
+    onSaveClick() {
+        this.$root.$axios.put(`/api/game-session/${this.session.id}`, {
+            name: this.form.name,
+            event_date: new Date(`${this.form.date} ${this.form.time}`),
+        }).then((response) => {
+            if (response.status == 200) {
+                this.$emit('game_session_edited', response.data);
+                this.modal?.hide();
+            } else {
+                // TODO: Show validation errors
+                console.log(response);
+            }
+        });
+    }
+
+    onShow() {
+        console.log('onShow');
+        let date_iso = new Date(this.session.event_date).toISOString();
+        this.form = {
+            name: this.session.name,
+            date: date_iso.slice(0, 10),
+            time: date_iso.slice(11, 16),
+        };
+    }
+
+    onHide() {
+        console.log('onHide');
+    }
+}
 </script>
 
 <style scoped>

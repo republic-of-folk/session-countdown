@@ -24,6 +24,7 @@
         "typescript": "~4.3.4",
         "vue": "~2.6.14",
         "vue-loader": "~15.9.7",
+        "vue-property-decorator": "~9.1.2",
         "vue-template-compiler": "~2.6.12"
     }
 }

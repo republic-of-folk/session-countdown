@@ -14,17 +14,21 @@
 
 <script lang="ts">
 import Vue, {PropType} from 'vue';
+import {Component} from 'vue-property-decorator'
 import {GameSession} from '../models/GameSession';
 
-// noinspection JSUnusedGlobalSymbols
-export default Vue.extend({
-    name: "GameSessionListItem",
+const GameSessionListItemProps = Vue.extend({
     props: {
         session: {
             type: Object as PropType<GameSession>
         }
-    },
+    }
 });
+
+// noinspection JSUnusedGlobalSymbols
+@Component
+export default class GameSessionListItem extends GameSessionListItemProps {
+};
 </script>
 
 <style scoped lang="scss">

@@ -1,7 +1,7 @@
 <template>
     <div>
-        <game-session-modal ref="modal"
-                            v-on:game_session_edited="onGameSessionEdited"
+        <game-session-modal v-on:game_session_edited="onGameSessionEdited"
+                            ref="modal"
         ></game-session-modal>
 
         <table v-if="game_sessions.length"
@@ -29,16 +29,23 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import {Component} from 'vue-property-decorator'
 import {GameSession} from '../models/GameSession';
+import GameSessionModal from './GameSessionModal.vue';
+import GameSessionListItem from './GameSessionListItem.vue';
 
 // noinspection JSUnusedGlobalSymbols
-export default Vue.extend({
-    name: "GameSessionList",
-    data() {
-        return {
-            game_sessions: [] as Array<GameSession>,
-        }
+@Component({
+    components: {
+        GameSessionModal,
+        GameSessionListItem,
     },
+})
+export default class GameSessionList extends Vue {
+    game_sessions: Array<GameSession> = [];
+    // modal_open: Boolean = false;
+    // modal_session: GameSession | null = null;
+
     mounted() {
         let self = this;
         this.$root.$axios.get('/api/game-session').then(function (response) {
@@ -48,26 +55,29 @@ export default Vue.extend({
             });
             self.game_sessions = data;
         });
-    },
-    methods: {
-        open_edit_modal(session: GameSession) {
-            let $modal = (this.$refs.modal as Vue & { session: GameSession });
-            $modal.session = session;
-            let bs_modal = new this.$bootstrap.Modal($modal.$el, {});
-            bs_modal.show();
-        },
-        onGameSessionEdited(new_session_data: GameSession) {
-            let new_session = new GameSession(new_session_data.id, new_session_data.name, new Date(new_session_data.event_date));
+    };
 
-            let idx = this.game_sessions.findIndex(old_session => old_session.id == new_session.id);
-            if (idx >= 0) {
-                Vue.set(this.game_sessions, idx, new_session);
-            } else {
-                this.game_sessions.push(new_session);
-            }
-        },
-    },
-});
+    $refs!: {
+        modal: GameSessionModal,
+    }
+
+    open_edit_modal(session: GameSession) {
+        let $modal = (this.$refs.modal as Vue & { open: Function });
+
+        $modal.open(session);
+    };
+
+    onGameSessionEdited(new_session_data: GameSession) {
+        let new_session = new GameSession(new_session_data.id, new_session_data.name, new Date(new_session_data.event_date));
+
+        let idx = this.game_sessions.findIndex(old_session => old_session.id == new_session.id);
+        if (idx >= 0) {
+            Vue.set(this.game_sessions, idx, new_session);
+        } else {
+            this.game_sessions.push(new_session);
+        }
+    };
+};
 </script>
 
 <style scoped lang="scss">
